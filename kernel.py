@@ -44,5 +44,11 @@ def main():
 	# join data files on name column
 	heros = pd.merge(heros_info_dummies, heros_power_dummies, left_on=['name'], right_on=['hero_names'], how='inner')
 
+	# Prepare input and output variables X, y
+	X_columns_drop = ['name', 'hero_names', 'Race', 'Human']
+	X, y = heros.drop(X_columns_drop, axis=1), heros['Human']
+
+
+
 if __name__ == '__main__':
     main()
