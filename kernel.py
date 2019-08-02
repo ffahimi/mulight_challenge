@@ -40,7 +40,9 @@ def main():
 	info_cat_columns = ['Gender', 'Eye color', 'Hair color', 'Publisher', 'Skin color', 'Alignment']
 	# index categorical data of hero info
 	heros_info_dummies = pd.get_dummies(heros_info, columns=info_cat_columns)
-
 	
+	# join data files on name column
+	heros = pd.merge(heros_info_dummies, heros_power_dummies, left_on=['name'], right_on=['hero_names'], how='inner')
+
 if __name__ == '__main__':
     main()
