@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd 
 # Input data files should be placed in the "../input/" directory.
 import warnings
+from sklearn.preprocessing import Imputer
+
 
 INFO_PATH = '../input/heroes_information.csv'
 
@@ -23,7 +25,18 @@ def main():
 	heros_info['Weight'].fillna(heros_info['Weight'].median(), inplace=True)
 	heros_info['Publisher'].fillna(heros_info['Publisher'].mode()[0], inplace=True)
 
-	print(heros_info.columns[heros_info.isnull().any()])
-	
+	# Filling the data of height and weight with median values
+	imp = Imputer(missing_values=-99.0, strategy='median', axis=0)
+	heros_info["Height"]=imp.fit_transform(heros_info[["Height"]])
+	heros_info["Weight"]=imp.fit_transform(heros_info[["Weight"]])
+
+	# Reading powers csv
+	heros_power = pd.read_csv('./../input/super_hero_powers.csv')
+
+	power_cat_columns = heros_power.columns.drop("hero_names")
+	# index categorical data of hero powers
+	heros_power_dummies = pd.get_dummies(heros_power, columns=power_cat_columns)
+	print(power_cat_columns)
+
 if __name__ == '__main__':
     main()
