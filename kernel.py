@@ -36,7 +36,11 @@ def main():
 	power_cat_columns = heros_power.columns.drop("hero_names")
 	# index categorical data of hero powers
 	heros_power_dummies = pd.get_dummies(heros_power, columns=power_cat_columns)
-	print(power_cat_columns)
 
+	info_cat_columns = ['Gender', 'Eye color', 'Hair color', 'Publisher', 'Skin color', 'Alignment']
+	# index categorical data of hero info
+	heros_info_dummies = pd.get_dummies(heros_info, columns=info_cat_columns)
+
+	
 if __name__ == '__main__':
     main()
