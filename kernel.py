@@ -7,8 +7,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.model_selection import cross_val_score, StratifiedKFold, GridSearchCV
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import confusion_matrix
 
 INFO_PATH = '../input/heroes_information.csv'
+POWER_PATH = './../input/super_hero_powers.csv'
 
 warnings.filterwarnings('ignore')
 
@@ -34,7 +37,7 @@ def main():
 	heros_info["Weight"]=imp.fit_transform(heros_info[["Weight"]])
 
 	# Reading powers csv
-	heros_power = pd.read_csv('./../input/super_hero_powers.csv')
+	heros_power = pd.read_csv(POWER_PATH)
 
 	power_cat_columns = heros_power.columns.drop("hero_names")
 	# index categorical data of hero powers
@@ -62,6 +65,13 @@ def main():
 
 	# Evaluate the accuracy on the test set
 	print("RandomForest CV accuracy score: {:.2f}%".format(results.mean()*100))
+
+	# Calculating confution matrix for randomforest, more description in readme
+	y_pred = cross_val_predict(rfc, X, y, cv=5)
+	conf_mat = confusion_matrix(y, y_pred)
+	print("RandomForest ConfusionMatrix: {}".format(conf_mat))
+
+	
 
 
 if __name__ == '__main__':
