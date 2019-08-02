@@ -3,7 +3,10 @@ import pandas as pd
 # Input data files should be placed in the "../input/" directory.
 import warnings
 from sklearn.preprocessing import Imputer
+from sklearn.ensemble import RandomForestClassifier
 
+from sklearn.model_selection import cross_val_score, StratifiedKFold, GridSearchCV
+from sklearn.metrics import accuracy_score
 
 INFO_PATH = '../input/heroes_information.csv'
 
@@ -48,6 +51,17 @@ def main():
 	X_columns_drop = ['name', 'hero_names', 'Race', 'Human']
 	X, y = heros.drop(X_columns_drop, axis=1), heros['Human']
 
+	# Initialize a stratified split of our dataset for the validation process
+	skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+	# Initialize the classifier with the default parameters 
+	rfc = RandomForestClassifier(random_state=42, max_depth=8, n_jobs=-1, oob_score=True)
+
+	# Train it on the training set
+	results = cross_val_score(rfc, X, y, cv=skf)
+
+	# Evaluate the accuracy on the test set
+	print("RandomForest CV accuracy score: {:.2f}%".format(results.mean()*100))
 
 
 if __name__ == '__main__':
